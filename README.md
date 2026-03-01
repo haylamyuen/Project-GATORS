@@ -1,11 +1,11 @@
 # SDSS Data Analysis
 
-The top 50,000 entries of the SDSS dataset were retrieved from:
+The top 500,000 entries of the SDSS dataset were retrieved from:
 [https://skyserver.sdss.org/dr19](https://skyserver.sdss.org/dr19)
 
 The following SQL query was used:
 ```
-SELECT TOP 50000
+SELECT TOP 500000
 p.objid,p.ra,p.dec,p.u,p.g,p.r,p.i,p.z,
 p.run, p.rerun, p.camcol, p.field,
 s.specobjid, s.class, s.z as redshift,
