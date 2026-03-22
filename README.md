@@ -1,13 +1,13 @@
 # SDSS Data Analysis
 
-### Small Project by Haylam Yuen
+### This is a Small Project by Haylam Yuen
 
 <span style="color: #AAAAAA">If you want to use any part of this project, feel free</span>
 
 <br>
 
 In this project, the Sloan Digital Sky Survey (SDSS) was used, and the top 500,000 entries of the dataset were retrieved from:
-[https://skyserver.sdss.org/dr19](https://skyserver.sdss.org/dr19)
+[https://skyserver.sdss.org/CasJobs/SubmitJob.aspx](https://skyserver.sdss.org/CasJobs/SubmitJob.aspx)
 
 The following SQL query was used:
 ```
