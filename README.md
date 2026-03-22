@@ -13,9 +13,9 @@ The following SQL query was used:
 ```
 SELECT TOP 500000
 p.objid,p.ra,p.dec,p.u,p.g,p.r,p.i,p.z,
-p.run, p.rerun, p.camcol, p.field,
-s.specobjid, s.class, s.z as redshift,
-s.plate, s.mjd, s.fiberid, p.cx, p.cy, p.cz, p.type, p.flags
+s.specobjid, s.class, s.zWarning s.z as redshift,
+p.flags, p.petroRad_r, p.petroMag_r,
+p.expRad_r, p.deVRad_r, p.fracDeV_r, p.expAB_r, p.deVAB_r
 
 FROM PhotoObj AS p
 
