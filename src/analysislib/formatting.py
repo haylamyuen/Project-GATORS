@@ -24,22 +24,3 @@ def format_notebook():
         "font.size": 12,
         "savefig.facecolor": "#1e1e1e"
     })
-
-    # CSS for widgets
-    display(HTML("""
-    <style>
-    .output_area, .jupyter-widgets, .widgets-vbox, .widgets-hbox, .p-Widget {
-        background-color: #1e1e1e !important; border: none !important;
-    }
-    .dark-slider .widget-label { color: #e0e0e0 !important;
-                                font-size: 18px !important;
-                                font-family: monospace !important;
-                                font-weight: bold !important; }
-    .dark-slider .widget-readout { color: #e0e0e0 !important; font-family: monospace !important; font-size: 18px !important; font-weight: bold !important; }
-    .dark-slider .noUi-target { background: #2a2a2a !important; border: none !important; }
-    .dark-slider .noUi-connect { background: #4dabf7 !important; }
-    .dark-slider .noUi-handle { background: #cccccc !important; border: none !important; }
-    .dark-slider .noUi-handle:hover { background: #ffffff !important; }
-    img { background-color: #1e1e1e !important; }
-    </style>
-    """))
