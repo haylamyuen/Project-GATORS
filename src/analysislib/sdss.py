@@ -1,6 +1,6 @@
 import pandas as pd
 
-df = pd.read_csv("SDSS_500k_v3.csv")
+df = pd.read_csv("SDSS_library.csv")
 
 df = df[df["zWarning"] == 0] # Set the dataframe to only include instances where zWarning was 0
 
