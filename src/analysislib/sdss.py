@@ -16,6 +16,9 @@ qsos = df[df["class"] == "QSO"]
 
 galaxies = galaxies[(galaxies["petroRad_r"] > 0) & (galaxies["fracDeV_r"] > 0)]
 
+stars = stars.drop(columns=["petroRad_r", "petroMag_r", "fracDeV_r", "expRad_r", "deVRad_r", "expAB_r", "deVAB_r"])
+qsos = qsos.drop(columns=["petroRad_r", "petroMag_r", "fracDeV_r", "expRad_r", "deVRad_r", "expAB_r", "deVAB_r"])
+
 def _galaxies():
     return galaxies
 

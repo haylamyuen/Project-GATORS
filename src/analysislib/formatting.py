@@ -1,7 +1,6 @@
 # Import necessary libraries
 import matplotlib.pyplot as plt
 import seaborn as sns
-from IPython.display import display, HTML
 
 def format_notebook():
     # Theme Setup
