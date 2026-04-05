@@ -14,7 +14,7 @@ def gauss(x, mu):
 # Start interactive plotting
 def plot_redshift(z):
     shifted_wl = REST_WL*(1+z) # Define shifted wavelength
-    fig, ax = plt.subplots(figsize=(18, 6), facecolor="#1e1e1e")
+    fig, ax = plt.subplots(figsize=(18, 4), facecolor="#1e1e1e")
     ax.set_facecolor("#1e1e1e")
 
     # Plot original line
@@ -26,21 +26,21 @@ def plot_redshift(z):
     ax.plot(wavelength, gauss(wavelength, shifted_wl), lw=2.5, color="#ff5555", label=f"H-alpha: {REST_WL:.0f} nm --> {shifted_wl:.0f} nm")
 
     # Set plot aesthetics
-    ax.set_title(f"z = {z:.2f}  |  stretched by {z*100:.0f}%  |  ~{round(z*13800):,} million light-years", color="#cccccc", fontsize=9, loc="left", pad=8)
+    ax.set_title(f"z = {z:.2f}  |  stretched by {z*100:.0f}%  |  ~{round(z*13800):,} million light-years", color="#cccccc", fontsize=12, loc="left", pad=8)
     ax.set_xlabel("Wavelength (nm)", color="#aaaaaa", fontsize=9)
     ax.set_xlim(300, 2500)
-    ax.set_ylim(0, 1.4)
+    ax.set_ylim(0, 1.3)
     ax.set_yticks([])
-    ax.tick_params(colors="#777777", labelsize=8)
+    ax.tick_params(colors="#777777", labelsize=10)
     ax.grid(True, linestyle=":", alpha=0.15, color="#ffffff")
     for spine in ax.spines.values():
         spine.set_edgecolor("#333333")
-    ax.legend(facecolor="#2a2a2a", edgecolor="#444444", labelcolor="#e0e0e0", fontsize=8)
+    ax.legend(facecolor="#2a2a2a", edgecolor="#444444", labelcolor="#e0e0e0", fontsize=10)
     plt.tight_layout()
     plt.show()
 
 # Create interactive slider for redshift
-z_slider = widgets.FloatSlider(value=0.0, min=0.0, max=2.5, step=0.01, description="Redshift z =", continuous_update=True, layout=widgets.Layout(width="70%"), style={"description_width": "initial"})
+z_slider = widgets.FloatSlider(value=0.0, min=0.0, max=2.5, step=0.01, description="Redshift z =", continuous_update=True, layout=widgets.Layout(width="90%"), style={"description_width": "initial"})
 out = widgets.interactive_output(plot_redshift, {"z": z_slider})
 
 # Redshift Plot Function

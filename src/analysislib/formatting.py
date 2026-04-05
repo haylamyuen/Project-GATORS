@@ -24,8 +24,3 @@ def format_notebook():
         "font.size": 12,
         "savefig.facecolor": "#1e1e1e"
     })
-
-    display(HTML("""<style>
-        .widget-label { color: #cccccc !important; font-family: monospace !important; }
-        .jupyter-widgets { background: transparent !important; }
-    </style>"""))
