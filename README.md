@@ -1,8 +1,9 @@
-# SDSS Data Analysis
+# Project GATORS
+## (Galaxy Analysis, Trends, and Observations with Research of the SDSS)
 
 ### This is a Small Project by Haylam Yuen
 
-<span style="color: #AAAAAA">If you want to use any part of this project, feel free</span>
+<span style="color: #AAAAAA">If you would like to use any part of this project, feel free</span>
 
 <br>
 
@@ -14,8 +15,8 @@ The following SQL query was used:
 SELECT TOP 500000
 p.objid,p.ra,p.dec,p.u,p.g,p.r,p.i,p.z,
 s.class, s.zWarning, s.z as redshift,
-p.petroRad_r, p.petroMag_r,
-p.expRad_r, p.deVRad_r, p.fracDeV_r, p.expAB_r, p.deVAB_r
+p.petroRad_r, p.petroMag_r, p.fracDeV_r,
+p.petroR90_r, p.petroR50_r, p.expAB_r, p.deVAB_r
 
 FROM PhotoObj AS p
 
