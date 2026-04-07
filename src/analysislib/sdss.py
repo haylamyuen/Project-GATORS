@@ -24,8 +24,8 @@ def setup(df):
     galaxies = galaxies[(galaxies["petroRad_r"] > 0) & (galaxies["fracDeV_r"] > 0)]
 
     # Drop unnecessary columns
-    stars = stars.drop(columns=["petroRad_r",  "petroR50_r", "petro_R90_r", "petroMag_r", "fracDeV_r", "expAB_r", "deVAB_r"])
-    qsos = qsos.drop(columns=["petroRad_r", "petroR50_r", "petro_R90_r", "petroMag_r", "fracDeV_r", "expAB_r", "deVAB_r"])
+    stars = stars.drop(columns=["petroRad_r",  "petroR50_r", "petroR90_r", "petroMag_r", "fracDeV_r", "expAB_r", "deVAB_r"])
+    qsos = qsos.drop(columns=["petroRad_r", "petroR50_r", "petroR90_r", "petroMag_r", "fracDeV_r", "expAB_r", "deVAB_r"])
 
 # Return the three dataframes
 def _galaxies():
