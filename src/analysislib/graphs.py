@@ -105,3 +105,150 @@ def sky_map(df):
 
     # Show the graph
     fig.show()
+
+def hubble_fork():
+    out = """
+    <style>
+    .tf-wrap { background:#0d0d14; border:1px solid #1e1e2e; border-radius:4px; padding:18px 12px 10px; font-family:'Courier New',monospace; }
+    .tf-title { color:#9999bb; font-size:.78rem; letter-spacing:.1em; text-align:center; margin-bottom:14px; }
+    .tf-row   { display:flex; align-items:center; justify-content:center; gap:0; position:relative; }
+    .tf-arm   { display:flex; flex-direction:column; gap:18px; justify-content:center; margin-left:8px; }
+
+    .gnode    { display:flex; flex-direction:column; align-items:center; cursor:pointer; padding:6px; border-radius:4px;
+    border:1px solid transparent; transition:border-color .18s, filter .18s; }
+    .gnode:hover, .gnode.active { border-color:#555577; filter:brightness(1.3) drop-shadow(0 0 6px rgba(180,180,255,.35)); }
+    .gnode img { width:72px; height:72px; object-fit:cover; border-radius:3px; display:block; }
+    .gnode .nl { font-size:9px; color:#8888aa; margin-top:4px; letter-spacing:.07em; }
+    .arm-label { font-size:8px; color:#333348; letter-spacing:.06em; text-align:center; margin-bottom:2px; }
+
+    .tf-panel  { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; min-height:90px; }
+    .tf-panel.empty { display:flex; align-items:center; justify-content:center; }
+    .hint   { font-size:.72rem; color:#333344; letter-spacing:.06em; }
+
+    .tf-name { font-size:.92rem; color:#d0d0e8; margin-bottom:5px; }
+    .tf-tag  { display:inline-block; font-size:.62rem; letter-spacing:.08em; padding:1px 6px; border-radius:2px; margin-bottom:8px; }
+    .tf-desc { font-size:.82rem; color:#9090a8; line-height:1.55; }
+    .tf-sdss { margin-top:8px; font-size:.65rem; color:#444466; }
+    .tf-stats { display:flex; flex-direction:column; gap:6px; }
+
+    .srow   { display:flex; flex-direction:column; gap:2px; }
+    .slabel { font-size:.62rem; color:#444455; letter-spacing:.07em; }
+    .strack { height:4px; background:#1a1a2a; border-radius:2px; overflow:hidden; }
+    .sbar   { height:100%; border-radius:2px; transition:width .45s cubic-bezier(.4,0,.2,1); }
+    </style>
+
+    <div class='tf-wrap'>
+    <div class='tf-title'>THE HUBBLE TUNING FORK: Click any galaxy type</div>
+
+    <div class='tf-row'>
+        <!-- Ellipticals (left stem) -->
+        <div style='display:flex;align-items:center;gap:4px;'>
+        <div class='gnode' data-t='E0'><img src='images/hubble_fork/tf_E0.webp'><span class='nl'>E0</span></div>
+        <div style='width:18px;height:1px;background:#22223a'></div>
+        <div class='gnode' data-t='E3'><img src='images/hubble_fork/tf_E3.jpg'><span class='nl'>E3</span></div>
+        <div style='width:18px;height:1px;background:#22223a'></div>
+        <div class='gnode' data-t='E7'><img src='images/hubble_fork/tf_E7.jpg'><span class='nl'>E7</span></div>
+        <div style='width:18px;height:1px;background:#22223a'></div>
+        <div class='gnode' data-t='S0'><img src='images/hubble_fork/tf_S0.png'><span class='nl'>S0</span></div>
+        </div>
+
+        <!-- Fork split -->
+        <svg width='30' height='180' style='flex-shrink:0;overflow:visible'>
+        <line x1='0' y1='90' x2='15' y2='38' stroke='#22223a' stroke-width='1.2'/>
+        <line x1='0' y1='90' x2='15' y2='142' stroke='#22223a' stroke-width='1.2'/>
+        </svg>
+
+        <!-- Two arms -->
+        <div class='tf-arm'>
+        <div class='arm-label'>normal spirals</div>
+        <div style='display:flex;align-items:center;gap:4px;'>
+            <div class='gnode' data-t='Sa'><img src='images/hubble_fork/tf_Sa.png'><span class='nl'>Sa</span></div>
+            <div style='width:14px;height:1px;background:#22223a'></div>
+            <div class='gnode' data-t='Sb'><img src='images/hubble_fork/tf_Sb.jpg'><span class='nl'>Sb</span></div>
+            <div style='width:14px;height:1px;background:#22223a'></div>
+            <div class='gnode' data-t='Sc'><img src='images/hubble_fork/tf_Sc.jpg'><span class='nl'>Sc</span></div>
+        </div>
+        <div class='arm-label' style='margin-top:8px;'>barred spirals</div>
+        <div style='display:flex;align-items:center;gap:4px;'>
+            <div class='gnode' data-t='SBa'><img src='images/hubble_fork/tf_SBa.jpg'><span class='nl'>SBa</span></div>
+            <div style='width:14px;height:1px;background:#22223a'></div>
+            <div class='gnode' data-t='SBb'><img src='images/hubble_fork/tf_SBb.jpg'><span class='nl'>SBb</span></div>
+            <div style='width:14px;height:1px;background:#22223a'></div>
+            <div class='gnode' data-t='SBc'><img src='images/hubble_fork/tf_SBc.jpg'><span class='nl'>SBc</span></div>
+        </div>
+        </div>
+    </div>
+
+    <div class='tf-panel empty' id='tfp'>
+        <span class='hint'>Click a galaxy type above :)</span>
+    </div>
+    </div>
+
+    <script>
+    var D = {
+    E0:  {name:'Elliptical E0',  tag:'ELLIPTICAL', tc:'#c8844a',
+            desc:'Perfectly spherical. Old red stars, no star formation, no disc. Smooth de Vaucouleurs light profile. Common at centres of galaxy clusters.',
+            stats:[['Star formation',2],['Disc structure',0],['Bulge dominance',100],['Gas fraction',3]],
+            sdss:'g−r ~ 0.85–0.95 &nbsp;|&nbsp; C ~ 3.0–3.5 &nbsp;|&nbsp; fracDeV ~ 1.0'},
+    E3:  {name:'Elliptical E3',  tag:'ELLIPTICAL', tc:'#c8844a',
+            desc:'Moderately flattened elliptical (minor axis = 70% of major). Flattening may reflect rotation or viewing angle. Still featureless and red.',
+            stats:[['Star formation',2],['Disc structure',5],['Bulge dominance',95],['Gas fraction',4]],
+            sdss:'g−r ~ 0.82–0.92 &nbsp;|&nbsp; C ~ 2.8–3.3 &nbsp;|&nbsp; fracDeV ~ 0.9'},
+    E7:  {name:'Elliptical E7',  tag:'ELLIPTICAL', tc:'#c8844a',
+            desc:'Maximally flattened elliptical (minor axis = 30% of major). At this extreme the boundary with edge-on S0 galaxies becomes blurry.',
+            stats:[['Star formation',3],['Disc structure',15],['Bulge dominance',88],['Gas fraction',5]],
+            sdss:'g−r ~ 0.78–0.90 &nbsp;|&nbsp; C ~ 2.5–3.2 &nbsp;|&nbsp; fracDeV ~ 0.8–1.0'},
+    S0:  {name:'Lenticular S0',  tag:'LENTICULAR', tc:'#b08848',
+            desc:'Has a disc like a spiral but no arms and little star formation. May be a quenched spiral that lost its gas through ram-pressure stripping or strangulation.',
+            stats:[['Star formation',8],['Disc structure',70],['Bulge dominance',65],['Gas fraction',10]],
+            sdss:'g−r ~ 0.65–0.85 &nbsp;|&nbsp; C ~ 2.5–3.0 &nbsp;|&nbsp; fracDeV ~ 0.5–0.9'},
+    Sa:  {name:'Spiral Sa',      tag:'SPIRAL', tc:'#5577cc',
+            desc:'Large bulge, tightly wound smooth arms. Star formation ongoing but modest. The dominant bulge reflects a long history of mass assembly.',
+            stats:[['Star formation',40],['Disc structure',80],['Bulge dominance',55],['Gas fraction',22]],
+            sdss:'g−r ~ 0.45–0.65 &nbsp;|&nbsp; C ~ 2.5–3.0 &nbsp;|&nbsp; fracDeV ~ 0.4–0.6'},
+    Sb:  {name:'Spiral Sb',      tag:'SPIRAL', tc:'#5577cc',
+            desc:'Intermediate bulge, moderate arms. The Milky Way is thought to be Sb/SBb. Disc and bulge contribute roughly equally to total light.',
+            stats:[['Star formation',62],['Disc structure',88],['Bulge dominance',38],['Gas fraction',32]],
+            sdss:'g−r ~ 0.35–0.55 &nbsp;|&nbsp; C ~ 2.2–2.8 &nbsp;|&nbsp; fracDeV ~ 0.2–0.4'},
+    Sc:  {name:'Spiral Sc',      tag:'SPIRAL', tc:'#5577cc',
+            desc:'Tiny bulge, loosely wound patchy arms full of young blue stars and HII regions. Highest star formation of all spiral types.',
+            stats:[['Star formation',88],['Disc structure',97],['Bulge dominance',10],['Gas fraction',50]],
+            sdss:'g−r ~ 0.20–0.42 &nbsp;|&nbsp; C ~ 1.8–2.3 &nbsp;|&nbsp; fracDeV ~ 0.0–0.1'},
+    SBa: {name:'Barred Spiral SBa', tag:'BARRED SPIRAL', tc:'#4488bb',
+            desc:'Prominent bar with tightly wound arms from its ends. The bar funnels gas toward the nucleus, feeding star formation and the central black hole.',
+            stats:[['Star formation',38],['Disc structure',82],['Bulge dominance',52],['Gas fraction',24]],
+            sdss:'g−r ~ 0.45–0.65 &nbsp;|&nbsp; C ~ 2.4–3.0 &nbsp;|&nbsp; fracDeV ~ 0.4–0.6'},
+    SBb: {name:'Barred Spiral SBb', tag:'BARRED SPIRAL', tc:'#4488bb',
+            desc:'Intermediate barred spiral. Roughly half of all disc galaxies have bars. The bar rotates as a rigid structure, driving gas inflows and shaping spiral arms.',
+            stats:[['Star formation',60],['Disc structure',90],['Bulge dominance',35],['Gas fraction',34]],
+            sdss:'g−r ~ 0.33–0.52 &nbsp;|&nbsp; C ~ 2.1–2.7 &nbsp;|&nbsp; fracDeV ~ 0.2–0.4'},
+    SBc: {name:'Barred Spiral SBc', tag:'BARRED SPIRAL', tc:'#4488bb',
+            desc:'Small bulge, strong bar, loosely wound arms. Maximum star formation rate. Large HII regions visible across the disc.',
+            stats:[['Star formation',92],['Disc structure',97],['Bulge dominance',8],['Gas fraction',52]],
+            sdss:'g−r ~ 0.18–0.40 &nbsp;|&nbsp; C ~ 1.8–2.2 &nbsp;|&nbsp; fracDeV ~ 0.0–0.1'}
+    };
+    var SC={'Star formation':'#74c7ec','Disc structure':'#6688ee','Bulge dominance':'#f38ba8','Gas fraction':'#69db7c'};
+    var active=null;
+    document.querySelectorAll('.gnode').forEach(function(n){
+    n.addEventListener('click',function(){
+        if(active)active.classList.remove('active');
+        n.classList.add('active');active=n;
+        var d=D[n.dataset.t],p=document.getElementById('tfp');
+        p.classList.remove('empty');
+        p.innerHTML='<div><div class="tf-name">'+d.name+'</div>'
+        +'<span class="tf-tag" style="background:'+d.tc+'22;color:'+d.tc+';border:1px solid '+d.tc+'44">'+d.tag+'</span>'
+        +'<div class="tf-desc">'+d.desc+'</div>'
+        +'<div class="tf-sdss">SDSS: '+d.sdss+'</div></div>'
+        +'<div class="tf-stats">'+d.stats.map(function(s){
+            return '<div class="srow"><span class="slabel">'+s[0]+'</span>'
+            +'<div class="strack"><div class="sbar" style="width:0%;background:'+(SC[s[0]]||'#8888aa')+'"></div></div></div>';
+        }).join('')+'</div>';
+        requestAnimationFrame(function(){
+        p.querySelectorAll('.sbar').forEach(function(b,i){b.style.width=d.stats[i][1]+'%';});
+        });
+    });
+    });
+    document.querySelector('[data-t="Sb"]').click();
+    </script>"""
+    
+    return out
