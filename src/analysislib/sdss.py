@@ -1,5 +1,5 @@
 # Import necessary libraries
-import pandas as pd
+import numpy as np
 
 # Define setup function to clean and prepare the data
 def setup(df):
@@ -13,6 +13,7 @@ def setup(df):
 
     # Separate dataframe
     global galaxies
+    global galaxies_extended
     global stars
     global qsos
     
@@ -23,13 +24,21 @@ def setup(df):
     # Remove galaxies with zero or negative values
     galaxies = galaxies[(galaxies["petroRad_r"] > 0) & (galaxies["fracDeV_r"] > 0)]
 
+    # Add additional columns for galaxies
+    galaxies_extended = galaxies.copy()
+    galaxies_extended["g_r"] = galaxies_extended["g"] - galaxies_extended["r"]
+    galaxies_extended["C"]   = 5 * np.log10(np.abs(galaxies_extended["petroR90_r"] / galaxies_extended["petroR50_r"]))
+
     # Drop unnecessary columns
     stars = stars.drop(columns=["petroRad_r",  "petroR50_r", "petroR90_r", "petroMag_r", "fracDeV_r", "expAB_r", "deVAB_r"])
     qsos = qsos.drop(columns=["petroRad_r", "petroR50_r", "petroR90_r", "petroMag_r", "fracDeV_r", "expAB_r", "deVAB_r"])
 
-# Return the three dataframes
+# Return the four dataframes
 def _galaxies():
     return galaxies
+
+def _galaxies_extended():
+    return galaxies_extended
 
 def _stars():
     return stars
