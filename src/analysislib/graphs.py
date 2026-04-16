@@ -256,8 +256,7 @@ def hubble_fork():
 def redshift_distance():
     out = """
         <style>
-        .cos-wrap { background:#0d0d14; border:1px solid #1e1e2e; border-radius:4px;
-                    padding:18px 20px; font-family:'Courier New',monospace; max-width:820px; }
+        .cos-wrap { background:#0d0d14; border:1px solid #1e1e2e; border-radius:4px; padding:18px 20px; font-family:'Courier New',monospace; max-width:820px; }
         .cos-title { color:#9999bb; font-size:.78rem; letter-spacing:.1em; margin-bottom:14px; }
         .cos-row   { display:flex; gap:20px; align-items:flex-start; }
         .cos-canvas { flex:1; }
@@ -267,14 +266,13 @@ def redshift_distance():
         .cos-ctrl input[type=range] { width:100%; accent-color:#7799ff; }
         .cos-ctrl .val { font-size:.72rem; color:#9999cc; }
         .cos-readout { margin-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-        .cos-stat { background:#10101e; border:1px solid #1e1e2e; border-radius:3px;
-                    padding:8px 10px; }
+        .cos-stat { background:#10101e; border:1px solid #1e1e2e; border-radius:3px; padding:8px 10px; }
         .cos-stat .sk { font-size:.62rem; color:#444466; letter-spacing:.07em; margin-bottom:2px; }
         .cos-stat .sv { font-size:.88rem; color:#c0c0e0; }
         </style>
 
         <div class='cos-wrap'>
-        <div class='cos-title'>REDSHIFT → DISTANCE CALCULATOR &nbsp;—&nbsp; drag the slider</div>
+        <div class='cos-title'>REDSHIFT TO DISTANCE CALCULATOR</div>
         <div class='cos-row'>
         <div class='cos-canvas'><canvas id='cosC' width='520' height='220'></canvas></div>
         <div class='cos-controls'>
@@ -290,7 +288,7 @@ def redshift_distance():
             </div>
             <div class='cos-ctrl'>
             <label>Ω<sub>m</sub>  matter density</label>
-            <input type='range' id='omSlider' min='10' max='50' value='30'>
+            <input type='range' id='omSlider' min='10' max='80' value='30'>
             <span class='val' id='omVal'>0.30</span>
             </div>
         </div>
@@ -393,10 +391,10 @@ def redshift_distance():
             var dl_mpc=curDl, dl_gpc=(dl_mpc/1000).toFixed(2);
             var dl_mly=(dl_mpc*3.2616).toFixed(0);
             var lb=lookback(zCur).toFixed(2);
-            document.getElementById('rDl').textContent=dl_gpc+' Gpc  ('+parseInt(dl_mly).toLocaleString()+' Mly)';
-            document.getElementById('rLt').textContent=lb+' Gyr ago';
-            document.getElementById('rLtt').textContent=lb+' Gyr';
-            document.getElementById('rAge').textContent=(AGE_UNIVERSE-parseFloat(lb)).toFixed(2)+' Gyr';
+            document.getElementById('rDl').textContent=dl_gpc+' billion parsecs  ('+parseInt(dl_mly).toLocaleString()+' million light-years)';
+            document.getElementById('rLt').textContent=lb+' billion years ago';
+            document.getElementById('rLtt').textContent=lb+' billion years';
+            document.getElementById('rAge').textContent=(AGE_UNIVERSE-parseFloat(lb)).toFixed(2)+' billion years';
         }
 
         function update(){
