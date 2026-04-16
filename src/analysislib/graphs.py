@@ -252,3 +252,169 @@ def hubble_fork():
     </script>"""
     
     return out
+
+def redshift_distance():
+    out = """
+        <style>
+        .cos-wrap { background:#0d0d14; border:1px solid #1e1e2e; border-radius:4px;
+                    padding:18px 20px; font-family:'Courier New',monospace; max-width:820px; }
+        .cos-title { color:#9999bb; font-size:.78rem; letter-spacing:.1em; margin-bottom:14px; }
+        .cos-row   { display:flex; gap:20px; align-items:flex-start; }
+        .cos-canvas { flex:1; }
+        .cos-canvas canvas { display:block; width:100%; }
+        .cos-controls { width:200px; display:flex; flex-direction:column; gap:12px; padding-top:8px; }
+        .cos-ctrl label { font-size:.65rem; color:#555577; letter-spacing:.07em; display:block; margin-bottom:3px; }
+        .cos-ctrl input[type=range] { width:100%; accent-color:#7799ff; }
+        .cos-ctrl .val { font-size:.72rem; color:#9999cc; }
+        .cos-readout { margin-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+        .cos-stat { background:#10101e; border:1px solid #1e1e2e; border-radius:3px;
+                    padding:8px 10px; }
+        .cos-stat .sk { font-size:.62rem; color:#444466; letter-spacing:.07em; margin-bottom:2px; }
+        .cos-stat .sv { font-size:.88rem; color:#c0c0e0; }
+        </style>
+
+        <div class='cos-wrap'>
+        <div class='cos-title'>REDSHIFT → DISTANCE CALCULATOR &nbsp;—&nbsp; drag the slider</div>
+        <div class='cos-row'>
+        <div class='cos-canvas'><canvas id='cosC' width='520' height='220'></canvas></div>
+        <div class='cos-controls'>
+            <div class='cos-ctrl'>
+            <label>REDSHIFT  z</label>
+            <input type='range' id='zSlider' min='0' max='300' value='50'>
+            <span class='val' id='zVal'>0.50</span>
+            </div>
+            <div class='cos-ctrl'>
+            <label>H₀  (km/s/Mpc)</label>
+            <input type='range' id='h0Slider' min='60' max='80' value='70'>
+            <span class='val' id='h0Val'>70</span>
+            </div>
+            <div class='cos-ctrl'>
+            <label>Ω<sub>m</sub>  matter density</label>
+            <input type='range' id='omSlider' min='10' max='50' value='30'>
+            <span class='val' id='omVal'>0.30</span>
+            </div>
+        </div>
+        </div>
+        <div class='cos-readout'>
+        <div class='cos-stat'><div class='sk'>LUMINOSITY DISTANCE</div><div class='sv' id='rDl'>—</div></div>
+        <div class='cos-stat'><div class='sk'>LOOKBACK TIME</div><div class='sv' id='rLt'>—</div></div>
+        <div class='cos-stat'><div class='sk'>LIGHT TRAVEL TIME</div><div class='sv' id='rLtt'>—</div></div>
+        <div class='cos-stat'><div class='sk'>UNIVERSE AGE AT z</div><div class='sv' id='rAge'>—</div></div>
+        </div>
+        </div>
+
+        <script>
+        (function(){
+        var C_KMS = 2.998e5, H0=70, Om=0.3, OL=0.7;
+        var AGE_UNIVERSE = 13.8;
+
+        function Hz(z){ return H0*Math.sqrt(Om*Math.pow(1+z,3)+OL); }
+
+        function integrate(fn, a, b, n){
+            n = n||200; var h=(b-a)/n, s=0;
+            for(var i=0;i<n;i++) s += fn(a+h*(i+0.5));
+            return s*h;
+        }
+
+        function dL(z){ // Mpc
+            if(z<=0) return 0;
+            var dc = C_KMS * integrate(function(zp){return 1/Hz(zp);},0,z);
+            return dc*(1+z);
+        }
+
+        function lookback(z){ // Gyr
+            if(z<=0) return 0;
+            var GYR_PER_MPC = 977.8/H0;
+            return integrate(function(zp){return 1/((1+zp)*Hz(zp)/H0);},0,z) * GYR_PER_MPC;
+        }
+
+        var canvas=document.getElementById('cosC'), ctx=canvas.getContext('2d');
+        var W=canvas.width, H=canvas.height;
+        var PAD={t:20,r:16,b:36,l:58};
+
+        function draw(zCur){
+            OL = 1-Om;
+            ctx.clearRect(0,0,W,H);
+            ctx.fillStyle='#0d0d14'; ctx.fillRect(0,0,W,H);
+
+            var zMax=3, dlMax=dL(zMax);
+            var pts=[];
+            for(var i=0;i<=120;i++){
+            var z=i/120*zMax, dl=dL(z);
+            pts.push([z,dl]);
+            }
+
+            function tx(z){ return PAD.l+(z/zMax)*(W-PAD.l-PAD.r); }
+            function ty(dl){ return H-PAD.b-(dl/dlMax)*(H-PAD.t-PAD.b); }
+
+            // grid
+            ctx.strokeStyle='#1a1a2a'; ctx.lineWidth=1;
+            [0.5,1,1.5,2,2.5].forEach(function(z){
+            ctx.beginPath(); ctx.moveTo(tx(z),PAD.t); ctx.lineTo(tx(z),H-PAD.b); ctx.stroke();
+            });
+            [0.25,0.5,0.75,1].forEach(function(f){
+            var dl=f*dlMax;
+            ctx.beginPath(); ctx.moveTo(PAD.l,ty(dl)); ctx.lineTo(W-PAD.r,ty(dl)); ctx.stroke();
+            });
+
+            // curve
+            var grad=ctx.createLinearGradient(PAD.l,0,W-PAD.r,0);
+            grad.addColorStop(0,'#f38ba8'); grad.addColorStop(0.4,'#cba6f7');
+            grad.addColorStop(1,'#74c7ec');
+            ctx.beginPath(); ctx.moveTo(tx(pts[0][0]),ty(pts[0][1]));
+            pts.forEach(function(p){ ctx.lineTo(tx(p[0]),ty(p[1])); });
+            ctx.strokeStyle=grad; ctx.lineWidth=2.5; ctx.stroke();
+
+            // current z marker
+            var curDl=dL(zCur);
+            var cx2=tx(zCur), cy2=ty(curDl);
+            ctx.beginPath(); ctx.arc(cx2,cy2,5,0,2*Math.PI);
+            ctx.fillStyle='#ffffff'; ctx.fill();
+            ctx.beginPath(); ctx.moveTo(cx2,PAD.t); ctx.lineTo(cx2,H-PAD.b);
+            ctx.strokeStyle='#ffffff'; ctx.lineWidth=0.8; ctx.setLineDash([3,4]); ctx.stroke();
+            ctx.setLineDash([]);
+
+            // axes
+            ctx.fillStyle='#666688'; ctx.font='10px Courier New'; ctx.textAlign='center';
+            [0,0.5,1,1.5,2,2.5,3].forEach(function(z){
+            ctx.fillText(z.toFixed(1),tx(z),H-PAD.b+14);
+            });
+            ctx.textAlign='right'; ctx.font='9px Courier New';
+            [0,0.25,0.5,0.75,1].forEach(function(f){
+            var dl=f*dlMax;
+            ctx.fillText((dl/1000).toFixed(1)+'Gpc',PAD.l-4,ty(dl)+3);
+            });
+            ctx.textAlign='center'; ctx.fillStyle='#444466';
+            ctx.fillText('Redshift  z',W/2,H-2);
+            ctx.save(); ctx.translate(12,H/2); ctx.rotate(-Math.PI/2);
+            ctx.fillText('Luminosity distance',0,0); ctx.restore();
+
+            // update readouts
+            var dl_mpc=curDl, dl_gpc=(dl_mpc/1000).toFixed(2);
+            var dl_mly=(dl_mpc*3.2616).toFixed(0);
+            var lb=lookback(zCur).toFixed(2);
+            document.getElementById('rDl').textContent=dl_gpc+' Gpc  ('+parseInt(dl_mly).toLocaleString()+' Mly)';
+            document.getElementById('rLt').textContent=lb+' Gyr ago';
+            document.getElementById('rLtt').textContent=lb+' Gyr';
+            document.getElementById('rAge').textContent=(AGE_UNIVERSE-parseFloat(lb)).toFixed(2)+' Gyr';
+        }
+
+        function update(){
+            var z=document.getElementById('zSlider').value/100;
+            H0=parseInt(document.getElementById('h0Slider').value);
+            Om=document.getElementById('omSlider').value/100;
+            document.getElementById('zVal').textContent=z.toFixed(2);
+            document.getElementById('h0Val').textContent=H0;
+            document.getElementById('omVal').textContent=Om.toFixed(2);
+            draw(z);
+        }
+
+        ['zSlider','h0Slider','omSlider'].forEach(function(id){
+            document.getElementById(id).addEventListener('input',update);
+        });
+        update();
+        })();
+        </script>
+        """
+    
+    return out
