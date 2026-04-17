@@ -109,7 +109,7 @@ def sky_map(df):
 def mass_quenching(galaxies):
     # Setup the plot
     fig, axes = plt.subplots(1, 2, figsize=(14, 5), facecolor="#1e1e1e")
-    fig.suptitle("Mass-Dependent Quenching", color="#e0e0e0", fontsize=12, fontweight="bold", y=1.01)
+    fig.suptitle("Mass-Dependent Quenching", color="#e0e0e0", fontsize=18, fontweight="bold", y=1.01)
 
     # LEFT PLOT: Quenched fraction vs Absolute magnitudes
     ax1 = axes[0]; ax1.set_facecolor("#1e1e1e")
@@ -135,7 +135,7 @@ def mass_quenching(galaxies):
     ax1.invert_xaxis() # So that brighter magnitudes are on the right
     ax1.set_xlabel("Absolute magnitude", color="#aaaaaa", fontsize=10)
     ax1.set_ylabel("Quenched fraction of galaxies (g−r > 0.65)", color="#aaaaaa", fontsize=10)
-    ax1.set_title("Quenched fraction vs luminosity", color="#cccccc", fontsize=9, pad=8)
+    ax1.set_title("Quenched fraction vs luminosity", color="#cccccc", fontsize=12, pad=8)
     ax1.set_ylim(0, 1.05)
     ax1.axhline(0.5, color="#555555", lw=1, ls=":")
     ax1.text(-18.1, 0.52, "50%", color="#555555", fontsize=7.5, style="italic")
@@ -172,7 +172,7 @@ def mass_quenching(galaxies):
     ax2.text(0.195, 0.655, "Green Valley", color="#69db7c", fontsize=7.5, ha="right", style="italic")
     ax2.set_xlabel("Redshift", color="#aaaaaa", fontsize=10)
     ax2.set_ylabel("Median g − r colour", color="#aaaaaa", fontsize=10)
-    ax2.set_title("Colour evolution across time\n(bright vs faint galaxies)", color="#cccccc", fontsize=9, pad=8)
+    ax2.set_title("Colour evolution across time\n(bright vs faint galaxies)", color="#cccccc", fontsize=12, pad=8)
     ax2.tick_params(colors="#777777", labelsize=8)
     ax2.grid(True, ls=":", alpha=0.10, color="#ffffff")
     ax2.legend(facecolor="#2a2a2a", edgecolor="#444444", labelcolor="#e0e0e0", fontsize=8)
