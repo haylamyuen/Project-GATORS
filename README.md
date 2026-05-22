@@ -3,7 +3,7 @@
 
 ### This is a Small Project by Haylam Yuen
 
-<span style="color: #AAAAAA">If you would like to use any part of this project, feel free</span>
+<span style="color: #AAAAAA">If you would like to use any part of this project, feel free</span> [MIT License](LICENSE)
 
 <br>
 
